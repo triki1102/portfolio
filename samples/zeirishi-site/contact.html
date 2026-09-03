@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>お問い合わせ・無料相談｜ひかり会計事務所（架空のサンプルサイト）</title>
+<meta name="description" content="無料相談の申し込みフォーム。2営業日以内にご連絡します。架空の事務所を題材にした制作サンプルです。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="sample-note">架空の税理士事務所を題材にした制作サンプルです。フォームは送信されません。</div>
+<header class="site-head"><div class="wrap">
+  <a class="brand" href="index.html">ひかり会計事務所<small>税理士 ・ 練馬区（架空）</small></a>
+  <button class="menu-btn" aria-expanded="false" aria-controls="nav">メニュー</button>
+  <nav class="nav" id="nav">
+    <a href="index.html">ホーム</a>
+    <a href="about.html">事務所案内</a>
+    <a href="services.html">サービス</a>
+    <a href="price.html">料金</a>
+    <a href="news.html">お知らせ・ブログ</a>
+    <a class="btn" href="contact.html" aria-current="page">無料相談</a>
+  </nav>
+</div></header>
+
+<div class="page-hero"><div class="wrap">
+  <p class="crumbs"><a href="index.html">ホーム</a> › お問い合わせ</p>
+  <h1>お問い合わせ・無料相談</h1>
+  <p>2営業日以内にご連絡します。相談だけで終わっても構いません。</p>
+</div></div>
+
+<section><div class="wrap two">
+  <form class="form" id="form" novalidate>
+    <label>お名前<span>必須</span></label><input type="text" name="name" required autocomplete="name">
+    <label>メールアドレス<span>必須</span></label><input type="email" name="email" required autocomplete="email">
+    <label>電話番号（任意）</label><input type="tel" name="tel" autocomplete="tel">
+    <label>事業の形態</label>
+    <select name="type"><option>個人事業主</option><option>法人</option><option>これから開業</option><option>その他・分からない</option></select>
+    <label>ご相談内容</label>
+    <select name="topic"><option>顧問契約について</option><option>確定申告・決算について</option><option>税務調査の連絡が来た</option><option>開業・法人化について</option><option>その他</option></select>
+    <label>ご希望の連絡方法</label>
+    <select name="how"><option>メール</option><option>電話</option><option>オンライン会議</option><option>来所</option></select>
+    <label>内容（分かる範囲で）</label><textarea name="body" placeholder="例：来年3月の確定申告をお願いしたい。帳簿はつけていません。"></textarea>
+    <button class="btn" type="submit">この内容で送信する</button>
+    <p class="fine">サンプルのため送信されません。実案件ではフォーム送信・自動返信メール・事務所への通知を設定します。</p>
+    <div class="done" id="done">送信しました（サンプル表示）。2営業日以内にご連絡します。</div>
+  </form>
+  <div class="info">
+    <h2 class="sec">お電話でのご相談</h2>
+    <p class="sec-lead">平日 9:00〜18:00。相談中で出られない場合は折り返します。</p>
+    <p style="font-family:'Noto Serif JP',serif;font-size:28px;font-weight:700;color:var(--navy);margin:0 0 20px">03-0000-0000</p>
+    <h2 class="sec">所在地</h2>
+    <dl>
+      <dt>住所</dt><dd>東京都練馬区〇〇 1-2-3 〇〇ビル 4F</dd>
+      <dt>最寄り駅</dt><dd>西武池袋線 練馬駅 北口 徒歩5分</dd>
+      <dt>営業時間</dt><dd>平日 9:00〜18:00（土曜は予約制）</dd>
+    </dl>
+    <div class="map">地図（実案件ではGoogleマップを埋め込み）</div>
+  </div>
+</div></section>
+
+<footer class="site-foot"><div class="wrap">
+  <div>© ひかり会計事務所（架空） ・ 東京都練馬区〇〇 1-2-3 ・ 03-0000-0000</div>
+  <nav><a href="about.html">事務所案内</a><a href="services.html">サービス</a><a href="price.html">料金</a><a href="news.html">お知らせ</a><a href="contact.html">お問い合わせ</a><a href="../../index.html">制作: 栃尾李樹</a></nav>
+</div></footer>
+<script src="site.js"></script>
+</body>
+</html>
