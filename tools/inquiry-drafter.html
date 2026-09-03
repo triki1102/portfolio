@@ -114,7 +114,12 @@
     return best;
   }
   function extract(text){
-    const name = (text.match(/([一-龥ぁ-んァ-ヶA-Za-z]{1,10})(?:と申します|です[。、]|といいます)/)||[])[1] || '';
+    // 名前: 「〇〇と申します」「〇〇です。」の形だけ拾う。数字の直後や「〜くらい」「〜ほど」は除外
+    const bad = /(くらい|ぐらい|ほど|程度|予定|以上|以下|希望|可能|大丈夫|無理)$/;
+    let name = '';
+    for (const re of [/(?:^|[^0-9０-９])([一-龥ぁ-んァ-ヶA-Za-z]{1,6})(?:と申します|といいます|と言います)/, /(?:^|[。、！\s])([一-龥ぁ-んァ-ヶA-Za-z]{1,6})です[。、！]/]) {
+      const m = text.match(re); if (m && !bad.test(m[1])) { name = m[1]; break; }
+    }
     const date = (text.match(/(\d{1,2})月\s*(\d{1,2})日/)||[]);
     const time = (text.match(/(\d{1,2})[:：時](\d{2})?/)||[]);
     const people = (text.match(/(\d{1,3})\s*(?:名|人)/)||[])[1] || '';
