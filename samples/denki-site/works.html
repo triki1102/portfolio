@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>施工事例｜ひまわり電設（架空のサンプルサイト）</title>
+<meta name="description" content="住宅・店舗・工場の電気工事の施工事例。工期と費用の目安つき。架空の会社を題材にした制作サンプルです。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<style>
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+  .filters button { font: inherit; font-size: 14px; font-weight: 700; padding: 6px 16px; border-radius: 999px; border: 2px solid var(--line); background: #fff; color: var(--ink-2); cursor: pointer; }
+  .filters button[aria-pressed="true"] { background: var(--sun); border-color: var(--sun); color: #fff; }
+  .work[hidden] { display: none; }
+</style>
+</head>
+<body>
+<div class="sample-note">架空の電気工事会社を題材にした制作サンプルです。事例・数字はすべて仮のものです。実案件では施工写真に差し替えます。</div>
+<header class="site-head"><div class="wrap">
+  <a class="brand" href="index.html"><span class="mark">ひ</span><span><b>ひまわり電設</b><small>足立区の電気工事（架空）</small></span></a>
+  <button class="menu-btn" aria-expanded="false" aria-controls="nav">メニュー</button>
+  <nav class="nav" id="nav">
+    <a href="index.html">ホーム</a>
+    <a href="service.html">工事内容</a>
+    <a href="works.html" aria-current="page">施工事例</a>
+    <a href="company.html">会社案内</a>
+    <a href="recruit.html">採用情報</a>
+    <a class="btn" href="contact.html">見積もり無料</a>
+  </nav>
+</div></header>
+
+<div class="page-hero"><div class="wrap">
+  <p class="crumbs"><a href="index.html">ホーム</a> › 施工事例</p>
+  <h1>施工事例</h1>
+  <p>工期と費用の目安を、できるだけそのまま載せています。</p>
+</div></div>
+
+<section><div class="wrap">
+  <div class="filters" role="group" aria-label="種類で絞り込む">
+    <button aria-pressed="true" data-f="all">すべて</button>
+    <button aria-pressed="false" data-f="住宅">住宅</button>
+    <button aria-pressed="false" data-f="店舗">店舗・オフィス</button>
+    <button aria-pressed="false" data-f="工場">工場・倉庫</button>
+    <button aria-pressed="false" data-f="太陽光">太陽光・EV</button>
+  </div>
+  <div class="works" id="works">
+    <article class="work" data-cat="住宅"><div class="ph a">戸建て住宅<br>分電盤交換＋EVコンセント</div><div class="body"><span class="cat">住宅</span><h3>築25年の分電盤を交換し、EV充電用200Vを新設</h3><p>ブレーカーが頻繁に落ちるとのご相談。契約容量の見直しと分電盤交換、駐車場へのEV用コンセントを1日で施工。</p><dl><dt>場所</dt><dd>足立区</dd><dt>工期</dt><dd>1日</dd><dt>費用</dt><dd>168,000円（税込）</dd></dl></div></article>
+    <article class="work" data-cat="店舗"><div class="ph b">ラーメン店<br>開業時の電気設備一式</div><div class="body"><span class="cat">店舗</span><h3>厨房の動力・照明・看板まで開業に間に合わせて施工</h3><p>内装業者と工程を合わせ、厨房機器の動力回路、客席の照明、袖看板の電源を4日間で完了。</p><dl><dt>場所</dt><dd>葛飾区</dd><dt>工期</dt><dd>4日</dd><dt>費用</dt><dd>980,000円（税込）</dd></dl></div></article>
+    <article class="work" data-cat="工場"><div class="ph c">町工場<br>高天井LED化</div><div class="body"><span class="cat">工場</span><h3>水銀灯32台をLEDに交換、電気代を月4万円削減</h3><p>操業を止められないため、日曜2日間で施工。照度は施工前より上がり、電気代は月4万円減。</p><dl><dt>場所</dt><dd>足立区</dd><dt>工期</dt><dd>2日</dd><dt>費用</dt><dd>1,450,000円（税込）</dd></dl></div></article>
+    <article class="work" data-cat="住宅"><div class="ph d">マンション<br>エアコン専用回路の新設</div><div class="body"><span class="cat">住宅</span><h3>専用回路がない部屋にエアコン回路を新設</h3><p>管理組合への申請書類もこちらで作成。露出配線を最小にするルートで施工。</p><dl><dt>場所</dt><dd>北区</dd><dt>工期</dt><dd>半日</dd><dt>費用</dt><dd>38,500円（税込）</dd></dl></div></article>
+    <article class="work" data-cat="店舗"><div class="ph e">美容室<br>レイアウト変更の配線</div><div class="body"><span class="cat">店舗</span><h3>セット面の増設に合わせて電源とコンセントを移設</h3><p>定休日の1日で完了。ドライヤー用の回路を分け、ブレーカー落ちをなくした。</p><dl><dt>場所</dt><dd>荒川区</dd><dt>工期</dt><dd>1日</dd><dt>費用</dt><dd>132,000円（税込）</dd></dl></div></article>
+    <article class="work" data-cat="太陽光"><div class="ph f">戸建て住宅<br>太陽光4.2kW＋蓄電池</div><div class="body"><span class="cat">太陽光・EV</span><h3>太陽光と蓄電池を同時設置、補助金の申請も代行</h3><p>屋根の方角と影を確認して配置を設計。自治体の補助金申請を代行し、自己負担を抑えた。</p><dl><dt>場所</dt><dd>草加市</dd><dt>工期</dt><dd>2日</dd><dt>費用</dt><dd>2,480,000円（税込・補助金前）</dd></dl></div></article>
+    <article class="work" data-cat="工場"><div class="ph d">倉庫<br>三相200Vの引き込み</div><div class="body"><span class="cat">工場</span><h3>新設した機械のために動力を引き込み、電力会社への申請も代行</h3><p>申請から通電まで3週間。機械の納品日に合わせて配線を完了。</p><dl><dt>場所</dt><dd>八潮市</dd><dt>工期</dt><dd>2日（申請期間を除く）</dd><dt>費用</dt><dd>420,000円（税込）</dd></dl></div></article>
+    <article class="work" data-cat="住宅"><div class="ph a">戸建て住宅<br>全室LED化と人感センサー</div><div class="body"><span class="cat">住宅</span><h3>ご高齢のご夫婦宅、廊下と玄関を人感センサー照明に</h3><p>夜間の転倒防止が目的。既存の器具を活かせる箇所は電球交換のみで費用を抑えた。</p><dl><dt>場所</dt><dd>足立区</dd><dt>工期</dt><dd>1日</dd><dt>費用</dt><dd>74,800円（税込）</dd></dl></div></article>
+    <article class="work" data-cat="店舗"><div class="ph b">オフィス<br>OAフロアの配線整理</div><div class="body"><span class="cat">店舗</span><h3>席替えに合わせて床下配線を整理し、LANも同時に</h3><p>土曜の1日で20席分。電源とLANを同時に引き直し、足元のタップをなくした。</p><dl><dt>場所</dt><dd>川口市</dd><dt>工期</dt><dd>1日</dd><dt>費用</dt><dd>264,000円（税込）</dd></dl></div></article>
+  </div>
+</div></section>
+
+<div class="cta-band"><div class="wrap">
+  <h2>似た工事の見積もりは、写真1枚から。</h2>
+  <p>「うちも同じような状況」と思ったら、事例の名前を添えてご連絡ください。</p>
+  <a class="btn dark" href="contact.html">見積もりを頼む（無料）</a>
+</div></div>
+
+<footer class="site-foot"><div class="wrap">
+  <div>© ひまわり電設株式会社（架空） ・ 東京都足立区〇〇 1-2-3 ・ 03-0000-0000</div>
+  <nav><a href="service.html">工事内容</a><a href="works.html">施工事例</a><a href="company.html">会社案内</a><a href="recruit.html">採用情報</a><a href="contact.html">お問い合わせ</a><a href="../../index.html">制作: 栃尾李樹</a></nav>
+</div></footer>
+<script src="site.js"></script>
+<script>
+  document.querySelectorAll('.filters button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.filters button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    const f = b.dataset.f;
+    document.querySelectorAll('#works .work').forEach(w => { w.hidden = f !== 'all' && w.dataset.cat !== f; });
+  }));
+</script>
+</body>
+</html>
