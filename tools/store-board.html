@@ -175,8 +175,10 @@
     const s = e.target.dataset.sort; if (s) { sortDir = sortKey===s ? -sortDir : 1; sortKey = s; renderStock(); }
   });
   $('#btnAddStock').addEventListener('click', () => {
-    data.stock.unshift({ id:uid(), name:'', cat:'', qty:0, unit:'個', min:0, price:0, updated: todayStr() });
-    save(); renderStock(); const first = $('#stockTable tbody input'); if(first) first.focus();
+    const id = uid();
+    data.stock.unshift({ id, name:'', cat:'', qty:0, unit:'個', min:0, price:0, updated: todayStr() });
+    save(); renderStock();
+    const el = document.querySelector(`#stockTable tr[data-id="${id}"] input[data-f=name]`); if (el) { el.scrollIntoView({block:'center'}); el.focus(); }
   });
   ['#stockQ','#stockCat','#onlyLow'].forEach(s => $(s).addEventListener('input', renderStock));
   $('#btnCopyOrder').addEventListener('click', () => {
@@ -221,8 +223,10 @@
     if (e.target.dataset.del !== undefined) { const id=e.target.closest('tr').dataset.id; data.resv = data.resv.filter(r=>r.id!==id); save(); renderResv(); toast('削除しました'); }
   });
   $('#btnAddResv').addEventListener('click', () => {
-    data.resv.unshift({ id:uid(), date: $('#resvDate').value || todayStr(), time:'18:00', name:'', people:2, seat:'', tel:'', status:'予約中', memo:'' });
-    save(); renderResv(); const el = $('#resvTable tbody input[data-f=name]'); if(el) el.focus();
+    const id = uid();
+    data.resv.unshift({ id, date: $('#resvDate').value || todayStr(), time:'18:00', name:'', people:2, seat:'', tel:'', status:'予約中', memo:'' });
+    save(); renderResv();
+    const el = document.querySelector(`#resvTable tr[data-id="${id}"] input[data-f=name]`); if (el) { el.scrollIntoView({block:'center'}); el.focus(); }
   });
   $('#resvDate').addEventListener('input', renderResv);
   $('#btnResvAll').addEventListener('click', () => { $('#resvDate').value=''; renderResv(); });
