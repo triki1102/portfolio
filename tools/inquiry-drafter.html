@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>問い合わせ返信の下書き</title>
+<meta name="description" content="受信した問い合わせ文を貼ると、種別を判定して返信の下書きを作るサンプルツール。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<div class="page tool">
+  <p class="crumb"><a href="../index.html">← 制作実績へ戻る</a></p>
+  <p class="eyebrow">Sample tool / Inquiry drafter</p>
+  <h1>問い合わせ返信の下書き</h1>
+  <p class="lede">受信した文を貼ると、種別を判定して返信の下書きを作ります。お名前・日付・時間・人数は本文から拾います。店舗情報は一度入れればこのブラウザに残ります。</p>
+
+  <div class="two">
+    <div>
+      <div class="list" style="margin-bottom:16px">
+        <h3>店舗情報（差し込み用）</h3>
+        <div class="toolbar-row">
+          <label class="field">店名<input id="shopName" placeholder="例：カフェさくら"></label>
+          <label class="field">担当者<input id="staff" placeholder="例：栃尾"></label>
+        </div>
+        <div class="toolbar-row">
+          <label class="field">営業時間<input id="hours" placeholder="例：11:00〜20:00（水曜定休）"></label>
+          <label class="field">電話<input id="tel" placeholder="例：00-0000-0000"></label>
+        </div>
+        <label class="field">トーン
+          <select id="tone">
+            <option value="polite">丁寧（法人・初回向け）</option>
+            <option value="friendly">親しみ（常連・カジュアル店向け）</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="list">
+        <h3>受信した問い合わせ</h3>
+        <label class="field"><span>本文を貼り付け</span>
+          <textarea id="inbox" placeholder="例：はじめまして、田中と申します。9月12日の19時に4名で予約できますか？子ども連れです。"></textarea>
+        </label>
+        <div class="toolbar-row">
+          <label class="field">種別（自動判定。手で直せます）
+            <select id="kind">
+              <option value="auto">自動判定</option>
+              <option value="reserve">予約・空席の問い合わせ</option>
+              <option value="change">予約の変更・キャンセル</option>
+              <option value="hours">営業時間・アクセス</option>
+              <option value="stock">商品・在庫の確認</option>
+              <option value="quote">見積・団体・貸切</option>
+              <option value="complaint">ご意見・クレーム</option>
+              <option value="other">その他</option>
+            </select>
+          </label>
+          <label class="field"><span>&nbsp;</span><button class="btn primary" id="btnDraft">下書きを作る</button></label>
+          <label class="field"><span>&nbsp;</span><button class="btn" id="btnSample">例文を入れる</button></label>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="draft">
+        <div class="toolbar-row" style="margin-top:0">
+          <span class="pill muted" id="kindLabel">判定結果がここに出ます</span>
+          <span class="hint" id="picked"></span>
+        </div>
+        <pre id="out">下書きはここに表示されます。</pre>
+        <div class="toolbar-row">
+          <button class="btn primary" id="btnCopy">下書きをコピー</button>
+          <span class="hint">送る前に、拾った日付・人数が合っているか確認してください。</span>
+        </div>
+      </div>
+      <p class="hint" style="margin-top:12px">このサンプルは「規則で組み立てる」方式です。実案件では受信メールをAI（Claude）に渡して本文を生成し、店舗ごとの言い回しを学習させる形にできます。個人情報は端末の外に送っていません。</p>
+    </div>
+  </div>
+
+  <footer class="foot">サンプルツール ・ 制作: 栃尾李樹（Claude Code使用）</footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  const KEY = 'inquiry-drafter-v1';
+  const $ = s => document.querySelector(s);
+  const toast = m => { const t=$('#toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); };
+
+  // 店舗情報の保存・復元
+  const fields = ['shopName','staff','hours','tel','tone'];
+  try { const s = JSON.parse(localStorage.getItem(KEY)||'{}'); fields.forEach(f => { if (s[f]) $('#'+f).value = s[f]; }); } catch(e){}
+  fields.forEach(f => $('#'+f).addEventListener('input', () => {
+    const o = {}; fields.forEach(k => o[k] = $('#'+k).value); try { localStorage.setItem(KEY, JSON.stringify(o)); } catch(e){}
+  }));
+
+  const KINDS = {
+    reserve:  { label:'予約・空席', words:['予約','空い','空席','取れ','席は','人で','名で','来店したい','行きたい'] },
+    change:   { label:'変更・キャンセル', words:['キャンセル','変更','ずらし','別の日','日程を','時間を','延期','取り消'] },
+    hours:    { label:'営業時間・アクセス', words:['営業時間','何時まで','何時から','定休','休み','場所','駐車場','アクセス','駅から','行き方'] },
+    stock:    { label:'商品・在庫', words:['在庫','あります','売って','取り扱','入荷','取り置き','販売','残って'] },
+    quote:    { label:'見積・団体・貸切', words:['見積','貸切','貸し切','団体','宴会','コース','予算','ケータリング','法人'] },
+    complaint:{ label:'ご意見・クレーム', words:['不快','残念','ひどい','対応が','態度','冷め','遅い','間違','クレーム','返金','謝罪'] },
+    other:    { label:'その他', words:[] },
+  };
+  function detect(text){
+    let best='other', score=0;
+    for (const [k,v] of Object.entries(KINDS)) {
+      const s = v.words.reduce((n,w)=> n + (text.includes(w)?1:0), 0);
+      if (s>score) { score=s; best=k; }
+    }
+    // 変更・キャンセルの語は予約の語と重なりやすいので優先
+    if (KINDS.change.words.some(w=>text.includes(w))) best='change';
+    if (KINDS.complaint.words.filter(w=>text.includes(w)).length>=2) best='complaint';
+    return best;
+  }
+  function extract(text){
+    const name = (text.match(/([一-龥ぁ-んァ-ヶA-Za-z]{1,10})(?:と申します|です[。、]|といいます)/)||[])[1] || '';
+    const date = (text.match(/(\d{1,2})月\s*(\d{1,2})日/)||[]);
+    const time = (text.match(/(\d{1,2})[:：時](\d{2})?/)||[]);
+    const people = (text.match(/(\d{1,3})\s*(?:名|人)/)||[])[1] || '';
+    const child = /子ども|子供|お子|ベビー|キッズ/.test(text);
+    return {
+      name,
+      date: date[1] ? `${date[1]}月${date[2]}日` : '',
+      time: time[1] ? `${time[1]}時${time[2] && time[2]!=='00' ? time[2]+'分' : ''}` : '',
+      people, child
+    };
+  }
+
+  function build(kind, x, shop, tone){
+    const p = tone==='polite';
+    const nameLine = x.name ? `${x.name}様` : 'お問い合わせいただいた方へ';
+    const open = p ? `${nameLine}\n\nこのたびは${shop.name||'当店'}へお問い合わせいただき、ありがとうございます。${shop.staff? shop.staff+'が承ります。':''}`
+                   : `${nameLine}\n\n${shop.name||'当店'}です。お問い合わせありがとうございます！`;
+    const when = [x.date, x.time].filter(Boolean).join(' ');
+    const ppl = x.people ? `${x.people}名様` : '';
+    const closeP = `\n\nご不明な点がございましたら、このメールへの返信または お電話（${shop.tel||'店舗の電話番号'}）でお気軽にお知らせください。\n\n${shop.name||'店名'}${shop.staff? '　'+shop.staff:''}`;
+    const closeF = `\n\n他にも気になることがあれば、気軽に返信してください。\n\n${shop.name||'店名'}${shop.staff? '　'+shop.staff:''}`;
+    const close = p ? closeP : closeF;
+    let body = '';
+    switch(kind){
+      case 'reserve':
+        body = p
+          ? `\n\n${when||'ご希望の日時'}${ppl? '・'+ppl:''}でのご予約についてお返事いたします。\n\n【空席状況】\n・${when||'ご希望日時'}：〇（空きあり／満席／別の時間なら可）← 確認して書き換え\n\nご予約を確定させていただく場合は、下記をご返信ください。\n・お名前（フルネーム）\n・ご連絡のつくお電話番号\n・ご来店人数${x.child? '（お子様の人数と、お子様用の椅子の要否）':''}\n\nご返信を確認しだい、お席をお取りいたします。`
+          : `\n\n${when||'ご希望の日時'}${ppl? '・'+ppl:''}ですね。\n\n・${when||'ご希望日時'}：〇（空きあり／満席／別の時間なら可）← 確認して書き換え\n\n確定するときは、お名前・電話番号・人数${x.child? '（お子さんの人数）':''}を返信してください。折り返しお席をおさえます。`;
+        break;
+      case 'change':
+        body = p
+          ? `\n\nご予約の${/キャンセル|取り消/.test($('#inbox').value)?'キャンセル':'変更'}についてご連絡いただき、ありがとうございます。\n\n【承ったご予約】\n・お名前：${x.name||'（確認）'}\n・日時：${when||'（確認）'}${ppl? '\n・人数：'+ppl:''}\n\n${/キャンセル|取り消/.test($('#inbox').value)?'キャンセルを承りました。キャンセル料は発生いたしません（← 規定に合わせて書き換え）。またのご利用をお待ちしております。':'ご希望の新しい日時をお知らせください。空席を確認してお返事いたします。'}`
+          : `\n\n${/キャンセル|取り消/.test($('#inbox').value)?'キャンセル':'変更'}のご連絡、ありがとうございます。\n\n・お名前：${x.name||'（確認）'}\n・日時：${when||'（確認）'}${ppl? '\n・人数：'+ppl:''}\n\n${/キャンセル|取り消/.test($('#inbox').value)?'キャンセル承りました。またぜひお越しください。':'新しい希望日時を教えてください。空きを見てお返事します。'}`;
+        break;
+      case 'hours':
+        body = `\n\n${p?'営業時間とアクセスについてご案内いたします。':'営業時間とアクセスはこちらです。'}\n\n・営業時間：${shop.hours||'（店舗情報に入力）'}\n・アクセス：（最寄り駅・駐車場の案内を1〜2行）← 書き換え\n\n${p?'祝日や臨時休業は店頭掲示とSNSでお知らせしております。':'祝日や臨時休業はSNSでお知らせしています。'}`;
+        break;
+      case 'stock':
+        body = `\n\n${p?'商品の在庫についてお問い合わせいただき、ありがとうございます。':'在庫のお問い合わせありがとうございます。'}\n\n・商品名：（本文の商品名）← 書き換え\n・在庫：あり／残りわずか／次回入荷 〇月〇日 ← 確認して書き換え\n\n${p?'お取り置きをご希望の場合は、お名前とご来店予定日をご返信ください。3日間お取り置きいたします（← 規定に合わせて）。':'取り置きできます。お名前と来店予定日を返信してください。'}`;
+        break;
+      case 'quote':
+        body = `\n\n${p?'団体・貸切のご相談をいただき、ありがとうございます。お見積りのために、下記をお知らせください。':'団体・貸切のご相談ありがとうございます。見積りのために、次を教えてください。'}\n\n・ご希望日時（第2希望まで）\n・人数${ppl? '（'+ppl+'で承知しました）':''}\n・ご予算（お一人あたり）\n・お料理・お飲み物のご希望、アレルギー\n・貸切のご希望の有無\n\n${p?'いただいた内容をもとに、2営業日以内にお見積りをお送りいたします。':'内容が分かれば、2営業日以内に見積りを送ります。'}`;
+        break;
+      case 'complaint':
+        body = `\n\nこのたびは、ご不快な思いをさせてしまい、誠に申し訳ございません。\n\nいただいた内容（${when? when+'のご来店時の':''}〇〇について ← 事実を短く要約）を確認し、店内で共有いたしました。\n\n・原因：（分かっている範囲で正直に）\n・対応：（返金／再提供／改善策のいずれか）\n\n改めてお詫び申し上げます。よろしければ、直接お話を伺いたく、ご都合のよい連絡方法をお知らせください。`;
+        break;
+      default:
+        body = `\n\nお問い合わせの内容を確認し、担当より改めてご連絡いたします。\n\n【確認したい点】\n・（本文を読んで1〜2点）\n\n${p?'お手数をおかけしますが、よろしくお願いいたします。':'お手数ですが、よろしくお願いします。'}`;
+    }
+    return open + body + close;
+  }
+
+  function run(){
+    const text = $('#inbox').value.trim();
+    if (!text) { toast('本文を貼り付けてください'); return; }
+    let kind = $('#kind').value; if (kind==='auto') kind = detect(text);
+    const x = extract(text);
+    const shop = { name:$('#shopName').value.trim(), staff:$('#staff').value.trim(), hours:$('#hours').value.trim(), tel:$('#tel').value.trim() };
+    $('#out').textContent = build(kind, x, shop, $('#tone').value);
+    $('#kindLabel').textContent = '判定：' + KINDS[kind].label; $('#kindLabel').className = 'pill ok';
+    const picked = [x.name && '名前:'+x.name, x.date && '日付:'+x.date, x.time && '時間:'+x.time, x.people && '人数:'+x.people, x.child && '子ども連れ'].filter(Boolean);
+    $('#picked').textContent = picked.length ? '本文から拾った情報 → ' + picked.join(' / ') : '本文から日付や人数は拾えませんでした';
+  }
+  $('#btnDraft').addEventListener('click', run);
+  $('#inbox').addEventListener('keydown', e => { if ((e.metaKey||e.ctrlKey) && e.key==='Enter') run(); });
+  $('#btnCopy').addEventListener('click', () => navigator.clipboard?.writeText($('#out').textContent).then(()=>toast('コピーしました')).catch(()=>toast('コピーできませんでした')));
+
+  const SAMPLES = [
+    'はじめまして、田中と申します。9月12日の19時に4名で予約できますか？子ども連れです。',
+    'お世話になっております。鈴木です。明日18:30に予約していた分を、別の日に変更したいです。',
+    '日曜って何時までやってますか？駐車場はありますか？',
+    'ブレンドの豆200gはまだ売ってますか？取り置きできますか？',
+    '会社の懇親会で20名ほど、貸切できますか？予算は一人5000円くらいです。',
+    '先日伺いましたが、料理が冷めていて対応も残念でした。',
+  ];
+  let si = 0;
+  $('#btnSample').addEventListener('click', () => { $('#inbox').value = SAMPLES[si++ % SAMPLES.length]; $('#kind').value='auto'; run(); });
+})();
+</script>
+</body>
+</html>

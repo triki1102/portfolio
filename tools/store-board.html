@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>店舗ボード｜在庫・予約</title>
+<meta name="description" content="小さな店の在庫と予約を1画面で管理するサンプルツール。ブラウザだけで動き、データは端末内に保存されます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<div class="page tool">
+  <p class="crumb"><a href="../index.html">← 制作実績へ戻る</a></p>
+  <p class="eyebrow">Sample tool / Store board</p>
+  <h1>店舗ボード</h1>
+  <p class="lede">在庫と予約を1画面で。発注点を下回った品は自動で「今日の発注リスト」に上がります。データはこのブラウザの中だけに保存され、外には送られません。</p>
+
+  <div class="toolbar-row">
+    <button class="btn" id="btnSample">サンプルデータを入れる</button>
+    <button class="btn" id="btnExport">CSVで書き出す</button>
+    <label class="btn" for="fileImport">CSVを読み込む</label>
+    <input type="file" id="fileImport" accept=".csv,text/csv" hidden>
+    <button class="btn danger" id="btnClear">全部消す</button>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="stock">在庫</button>
+    <button role="tab" aria-selected="false" data-tab="resv">予約</button>
+  </div>
+
+  <!-- ===== 在庫 ===== -->
+  <section class="panel" id="panel-stock" role="tabpanel">
+    <div class="summary">
+      <div class="stat"><b id="stCount">0</b><span>品目</span></div>
+      <div class="stat warn"><b id="stLow">0</b><span>発注が必要</span></div>
+      <div class="stat"><b id="stValue">0</b><span>在庫金額（円）</span></div>
+    </div>
+
+    <div class="toolbar-row">
+      <label class="field">検索<input type="search" id="stockQ" placeholder="品名で絞り込み"></label>
+      <label class="field">カテゴリ<select id="stockCat"><option value="">すべて</option></select></label>
+      <label class="field"><span>&nbsp;</span><button class="btn primary" id="btnAddStock">＋ 品目を追加</button></label>
+      <label class="field"><span>&nbsp;</span><label><input type="checkbox" id="onlyLow"> 発注が必要な品だけ</label></label>
+    </div>
+
+    <div class="tablewrap">
+      <table id="stockTable">
+        <thead><tr>
+          <th><button data-sort="name">品名</button></th>
+          <th><button data-sort="cat">カテゴリ</button></th>
+          <th><button data-sort="qty">現在数</button></th>
+          <th>単位</th>
+          <th><button data-sort="min">発注点</button></th>
+          <th><button data-sort="price">単価</button></th>
+          <th>状態</th>
+          <th><button data-sort="updated">更新</button></th>
+          <th></th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="empty-note" id="stockEmpty">品目がありません。「サンプルデータを入れる」か「＋ 品目を追加」から始めてください。</p>
+    </div>
+
+    <div class="list" style="margin-top:16px">
+      <h3>今日の発注リスト</h3>
+      <ul id="orderList"><li class="hint">発注点を下回った品がここに並びます。</li></ul>
+      <div class="toolbar-row"><button class="btn" id="btnCopyOrder">発注リストをコピー</button></div>
+    </div>
+  </section>
+
+  <!-- ===== 予約 ===== -->
+  <section class="panel" id="panel-resv" role="tabpanel" hidden>
+    <div class="summary">
+      <div class="stat"><b id="rsToday">0</b><span>今日の予約</span></div>
+      <div class="stat"><b id="rsTodayPeople">0</b><span>今日の来店人数</span></div>
+      <div class="stat"><b id="rsWeek">0</b><span>今後7日の予約</span></div>
+    </div>
+
+    <div class="toolbar-row">
+      <label class="field">表示する日<input type="date" id="resvDate"></label>
+      <label class="field"><span>&nbsp;</span><button class="btn" id="btnResvAll">全期間を表示</button></label>
+      <label class="field"><span>&nbsp;</span><button class="btn primary" id="btnAddResv">＋ 予約を追加</button></label>
+    </div>
+
+    <div class="tablewrap">
+      <table id="resvTable">
+        <thead><tr>
+          <th>日付</th><th>時間</th><th>お名前</th><th>人数</th><th>席・内容</th><th>連絡先</th><th>状態</th><th>メモ</th><th></th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="empty-note" id="resvEmpty">予約がありません。</p>
+    </div>
+  </section>
+
+  <footer class="foot">サンプルツール ・ 制作: 栃尾李樹（Claude Code使用） ・ 実案件では店舗の運用に合わせて項目・通知・スプレッドシート連携を追加します</footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  const KEY = 'store-board-v1';
+  const $ = s => document.querySelector(s);
+  const todayStr = () => new Date().toISOString().slice(0,10);
+  const uid = () => Math.random().toString(36).slice(2,9);
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const toast = m => { const t=$('#toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); };
+
+  let data = load();
+  let sortKey = 'name', sortDir = 1;
+
+  function load(){
+    try { const d = JSON.parse(localStorage.getItem(KEY)); if (d && d.stock && d.resv) return d; } catch(e){}
+    return { stock: [], resv: [] };
+  }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){} }
+
+  /* ---------- 在庫 ---------- */
+  function stockStatus(it){
+    if (it.qty <= 0) return ['bad','在庫切れ'];
+    if (it.qty <= it.min) return ['warn','発注'];
+    return ['ok','十分'];
+  }
+  function renderStock(){
+    const q = $('#stockQ').value.trim().toLowerCase();
+    const cat = $('#stockCat').value;
+    const onlyLow = $('#onlyLow').checked;
+    const cats = [...new Set(data.stock.map(i=>i.cat).filter(Boolean))].sort();
+    const sel = $('#stockCat'); const cur = sel.value;
+    sel.innerHTML = '<option value="">すべて</option>' + cats.map(c=>`<option ${c===cur?'selected':''}>${esc(c)}</option>`).join('');
+
+    let rows = data.stock.filter(i => (!q || i.name.toLowerCase().includes(q)) && (!cat || i.cat===cat) && (!onlyLow || i.qty<=i.min));
+    rows.sort((a,b)=>{ const x=a[sortKey], y=b[sortKey]; return (typeof x==='number' ? x-y : String(x).localeCompare(String(y),'ja')) * sortDir; });
+
+    $('#stockTable tbody').innerHTML = rows.map(i => {
+      const [cls,label] = stockStatus(i);
+      return `<tr data-id="${i.id}" class="${cls==='ok'?'':'low'}">
+        <td><input data-f="name" value="${esc(i.name)}" placeholder="品名"></td>
+        <td><input data-f="cat" value="${esc(i.cat)}" placeholder="カテゴリ"></td>
+        <td><input data-f="qty" type="number" min="0" step="1" value="${i.qty}"></td>
+        <td><input data-f="unit" value="${esc(i.unit)}" style="width:60px"></td>
+        <td><input data-f="min" type="number" min="0" step="1" value="${i.min}"></td>
+        <td><input data-f="price" type="number" min="0" step="1" value="${i.price}"></td>
+        <td><span class="pill ${cls}">${label}</span></td>
+        <td class="hint">${esc(i.updated)}</td>
+        <td><button class="btn danger" data-del title="削除">×</button></td>
+      </tr>`;
+    }).join('');
+    $('#stockEmpty').hidden = data.stock.length > 0;
+
+    $('#stCount').textContent = data.stock.length;
+    const low = data.stock.filter(i=>i.qty<=i.min);
+    $('#stLow').textContent = low.length;
+    $('#stValue').textContent = data.stock.reduce((s,i)=>s+i.qty*i.price,0).toLocaleString('ja-JP');
+    $('#orderList').innerHTML = low.length
+      ? low.map(i=>`<li><b>${esc(i.name)}</b> 現在 ${i.qty}${esc(i.unit)} → 発注点 ${i.min}${esc(i.unit)}（不足 ${Math.max(0,i.min-i.qty+1)}${esc(i.unit)}以上）</li>`).join('')
+      : '<li class="hint">発注が必要な品はありません。</li>';
+  }
+  $('#stockTable').addEventListener('input', e => {
+    const tr = e.target.closest('tr'); const it = data.stock.find(i=>i.id===tr.dataset.id); if(!it) return;
+    const f = e.target.dataset.f; if(!f) return;
+    it[f] = e.target.type==='number' ? Number(e.target.value||0) : e.target.value;
+    it.updated = todayStr(); save();
+    // 状態列だけ更新（入力中にフォーカスを失わないため）
+    const [cls,label] = stockStatus(it); tr.className = cls==='ok'?'':'low';
+    tr.querySelector('.pill').className = 'pill '+cls; tr.querySelector('.pill').textContent = label;
+    tr.children[7].textContent = it.updated;
+    const low = data.stock.filter(i=>i.qty<=i.min); $('#stLow').textContent = low.length;
+    $('#stValue').textContent = data.stock.reduce((s,i)=>s+i.qty*i.price,0).toLocaleString('ja-JP');
+  });
+  $('#stockTable').addEventListener('change', () => renderStock());
+  $('#stockTable').addEventListener('click', e => {
+    if (e.target.dataset.del !== undefined) { const id=e.target.closest('tr').dataset.id; data.stock = data.stock.filter(i=>i.id!==id); save(); renderStock(); toast('削除しました'); }
+    const s = e.target.dataset.sort; if (s) { sortDir = sortKey===s ? -sortDir : 1; sortKey = s; renderStock(); }
+  });
+  $('#btnAddStock').addEventListener('click', () => {
+    data.stock.unshift({ id:uid(), name:'', cat:'', qty:0, unit:'個', min:0, price:0, updated: todayStr() });
+    save(); renderStock(); const first = $('#stockTable tbody input'); if(first) first.focus();
+  });
+  ['#stockQ','#stockCat','#onlyLow'].forEach(s => $(s).addEventListener('input', renderStock));
+  $('#btnCopyOrder').addEventListener('click', () => {
+    const low = data.stock.filter(i=>i.qty<=i.min);
+    const text = low.length ? `発注リスト ${todayStr()}\n` + low.map(i=>`・${i.name}：${Math.max(0,i.min-i.qty+1)}${i.unit}以上（現在${i.qty}${i.unit}）`).join('\n') : '発注が必要な品はありません';
+    navigator.clipboard?.writeText(text).then(()=>toast('コピーしました')).catch(()=>toast('コピーできませんでした'));
+  });
+
+  /* ---------- 予約 ---------- */
+  const STATUS = ['予約中','来店済','キャンセル'];
+  function renderResv(){
+    const day = $('#resvDate').value;
+    let rows = data.resv.filter(r => !day || r.date===day);
+    rows.sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time));
+    $('#resvTable tbody').innerHTML = rows.map(r => `<tr data-id="${r.id}">
+      <td><input data-f="date" type="date" value="${esc(r.date)}"></td>
+      <td><input data-f="time" type="time" value="${esc(r.time)}"></td>
+      <td><input data-f="name" value="${esc(r.name)}" placeholder="お名前"></td>
+      <td><input data-f="people" type="number" min="1" step="1" value="${r.people}"></td>
+      <td><input data-f="seat" value="${esc(r.seat)}" placeholder="席・コース"></td>
+      <td><input data-f="tel" value="${esc(r.tel)}" placeholder="電話など"></td>
+      <td><select data-f="status">${STATUS.map(s=>`<option ${s===r.status?'selected':''}>${s}</option>`).join('')}</select></td>
+      <td><input data-f="memo" value="${esc(r.memo)}" placeholder="アレルギー等"></td>
+      <td><button class="btn danger" data-del title="削除">×</button></td>
+    </tr>`).join('');
+    $('#resvEmpty').hidden = rows.length > 0;
+
+    const t = todayStr();
+    const todayRows = data.resv.filter(r=>r.date===t && r.status!=='キャンセル');
+    $('#rsToday').textContent = todayRows.length;
+    $('#rsTodayPeople').textContent = todayRows.reduce((s,r)=>s+Number(r.people||0),0);
+    const end = new Date(Date.now()+7*864e5).toISOString().slice(0,10);
+    $('#rsWeek').textContent = data.resv.filter(r=>r.date>=t && r.date<=end && r.status!=='キャンセル').length;
+  }
+  $('#resvTable').addEventListener('input', e => {
+    const tr = e.target.closest('tr'); const r = data.resv.find(x=>x.id===tr.dataset.id); if(!r) return;
+    const f = e.target.dataset.f; if(!f) return;
+    r[f] = e.target.type==='number' ? Number(e.target.value||0) : e.target.value; save();
+  });
+  $('#resvTable').addEventListener('change', () => renderResv());
+  $('#resvTable').addEventListener('click', e => {
+    if (e.target.dataset.del !== undefined) { const id=e.target.closest('tr').dataset.id; data.resv = data.resv.filter(r=>r.id!==id); save(); renderResv(); toast('削除しました'); }
+  });
+  $('#btnAddResv').addEventListener('click', () => {
+    data.resv.unshift({ id:uid(), date: $('#resvDate').value || todayStr(), time:'18:00', name:'', people:2, seat:'', tel:'', status:'予約中', memo:'' });
+    save(); renderResv(); const el = $('#resvTable tbody input[data-f=name]'); if(el) el.focus();
+  });
+  $('#resvDate').addEventListener('input', renderResv);
+  $('#btnResvAll').addEventListener('click', () => { $('#resvDate').value=''; renderResv(); });
+
+  /* ---------- タブ ---------- */
+  document.querySelectorAll('.tabs [role=tab]').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.tabs [role=tab]').forEach(x => x.setAttribute('aria-selected', x===b));
+    $('#panel-stock').hidden = b.dataset.tab!=='stock';
+    $('#panel-resv').hidden = b.dataset.tab!=='resv';
+  }));
+
+  /* ---------- CSV ---------- */
+  const csvCell = v => { const s=String(v ?? ''); return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; };
+  function parseCSV(text){
+    const rows=[]; let row=[], cell='', inQ=false;
+    for (let i=0;i<text.length;i++){ const c=text[i];
+      if (inQ){ if (c==='"'){ if (text[i+1]==='"'){cell+='"';i++;} else inQ=false; } else cell+=c; }
+      else if (c==='"') inQ=true; else if (c===','){row.push(cell);cell='';}
+      else if (c==='\n'||c==='\r'){ if(c==='\r'&&text[i+1]==='\n') i++; row.push(cell); rows.push(row); row=[]; cell=''; }
+      else cell+=c; }
+    if (cell!==''||row.length){ row.push(cell); rows.push(row); }
+    return rows.filter(r=>r.some(x=>x!==''));
+  }
+  $('#btnExport').addEventListener('click', () => {
+    const lines = [['種別','品名/日付','カテゴリ/時間','現在数/お名前','単位/人数','発注点/席','単価/連絡先','更新/状態','メモ']];
+    data.stock.forEach(i => lines.push(['stock',i.name,i.cat,i.qty,i.unit,i.min,i.price,i.updated,'']));
+    data.resv.forEach(r => lines.push(['resv',r.date,r.time,r.name,r.people,r.seat,r.tel,r.status,r.memo]));
+    const blob = new Blob(['﻿'+lines.map(l=>l.map(csvCell).join(',')).join('\n')], {type:'text/csv'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `store-board-${todayStr()}.csv`; a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 1000); toast('書き出しました');
+  });
+  $('#fileImport').addEventListener('change', e => {
+    const f = e.target.files[0]; if(!f) return;
+    f.text().then(text => {
+      const rows = parseCSV(text.replace(/^﻿/,'')); let n=0;
+      rows.slice(1).forEach(r => {
+        if (r[0]==='stock') { data.stock.push({id:uid(),name:r[1]||'',cat:r[2]||'',qty:Number(r[3]||0),unit:r[4]||'個',min:Number(r[5]||0),price:Number(r[6]||0),updated:r[7]||todayStr()}); n++; }
+        else if (r[0]==='resv') { data.resv.push({id:uid(),date:r[1]||'',time:r[2]||'',name:r[3]||'',people:Number(r[4]||0),seat:r[5]||'',tel:r[6]||'',status:STATUS.includes(r[7])?r[7]:'予約中',memo:r[8]||''}); n++; }
+      });
+      save(); renderStock(); renderResv(); toast(`${n}件読み込みました`); e.target.value='';
+    });
+  });
+
+  /* ---------- サンプル / 全消去 ---------- */
+  $('#btnSample').addEventListener('click', () => {
+    const t = todayStr(), d = n => new Date(Date.now()+n*864e5).toISOString().slice(0,10);
+    data.stock = [
+      {name:'コーヒー豆（ブレンド）',cat:'ドリンク',qty:3,unit:'kg',min:5,price:2400},
+      {name:'牛乳',cat:'ドリンク',qty:12,unit:'本',min:8,price:210},
+      {name:'食パン',cat:'フード',qty:0,unit:'斤',min:4,price:320},
+      {name:'卵',cat:'フード',qty:40,unit:'個',min:30,price:28},
+      {name:'紙カップ M',cat:'消耗品',qty:150,unit:'個',min:200,price:12},
+      {name:'ナプキン',cat:'消耗品',qty:800,unit:'枚',min:300,price:1},
+      {name:'洗剤',cat:'消耗品',qty:2,unit:'本',min:1,price:480},
+    ].map(i=>({id:uid(),updated:t,...i}));
+    data.resv = [
+      {date:t,time:'12:00',name:'佐藤',people:2,seat:'窓側',tel:'090-0000-0001',status:'予約中',memo:''},
+      {date:t,time:'18:30',name:'鈴木',people:4,seat:'テーブル',tel:'090-0000-0002',status:'予約中',memo:'乳アレルギー1名'},
+      {date:d(1),time:'11:30',name:'高橋',people:1,seat:'カウンター',tel:'',status:'予約中',memo:''},
+      {date:d(3),time:'19:00',name:'田中',people:6,seat:'個室',tel:'090-0000-0004',status:'予約中',memo:'誕生日プレート'},
+      {date:d(-1),time:'13:00',name:'伊藤',people:2,seat:'',tel:'',status:'来店済',memo:''},
+    ].map(r=>({id:uid(),...r}));
+    save(); renderStock(); renderResv(); toast('サンプルを入れました');
+  });
+  $('#btnClear').addEventListener('click', () => {
+    if (!confirm('在庫と予約をすべて消します。よろしいですか？')) return;
+    data = {stock:[],resv:[]}; save(); renderStock(); renderResv(); toast('消しました');
+  });
+
+  $('#resvDate').value = todayStr();
+  renderStock(); renderResv();
+})();
+</script>
+</body>
+</html>

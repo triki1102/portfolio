@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>栃尾李樹｜制作実績</title>
+<meta name="description" content="栃尾李樹の制作実績。AI（Claude Code）を使って、Webページ・業務ツール・記事を設計から納品まで作ります。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="hero">
+    <p class="eyebrow">Portfolio / Tochio Riki</p>
+    <h1>栃尾李樹</h1>
+    <p class="lede">AI（Claude Code）を使って、Webページ・業務ツール・記事を、設計から納品まで作ります。作るのはAIと私、確かめるのは私です。</p>
+    <div class="facts">
+      <div><b>3</b><span>できること</span></div>
+      <div><b>6</b><span>公開している制作物</span></div>
+      <div><b>1営業日</b><span>返信の目安</span></div>
+    </div>
+  </header>
+
+  <section class="block" id="services">
+    <h2>できること</h2>
+    <div class="grid3">
+      <article class="card">
+        <h3>Webページ制作</h3>
+        <p>構成・文章・デザイン・実装まで一人で。複数ページのサイト、1枚のLP、既存ページの修正や追加。スマホ対応と表示速度を標準で入れます。</p>
+        <p class="tag">HTML / CSS / JavaScript / WordPress</p>
+      </article>
+      <article class="card">
+        <h3>業務ツール・自動化</h3>
+        <p>「毎日の小さな手作業」をブラウザで動く画面にします。在庫・予約の管理、問い合わせ返信の下書き、データの整形。スプレッドシート連携も可。</p>
+        <p class="tag">ブラウザ完結 / スプレッドシート / GitHub管理</p>
+      </article>
+      <article class="card">
+        <h3>記事・リサーチ</h3>
+        <p>公開情報を集めて比較し、読み手が次に何をすればよいか分かる文章に。AIの下書きを人の目で整えるリライト・校閲も受けます。</p>
+        <p class="tag">調査 / 構成 / 執筆 / 校閲</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="block" id="works">
+    <h2>制作物</h2>
+    <p class="note">すべて実際に動くページです。クリックして確かめてください。</p>
+    <div class="works">
+
+      <article class="work">
+        <div class="work-head">
+          <span class="kind">Webサイト</span>
+          <h3><a href="https://triki1102.github.io/clinic-sample-site/" target="_blank" rel="noopener">さくらの丘内科クリニック（架空・20ページ）</a></h3>
+        </div>
+        <p><b>課題:</b> 地域のクリニックが「診療時間」「症状から診療科を探す」「初めての方の流れ」を迷わず見つけられるサイト。</p>
+        <p><b>作ったもの:</b> トップ＋下層19ページ。診療時間表、症状から探す導線、医師紹介、FAQ、アクセス、予約案内。スマホ対応。</p>
+        <p class="tag">HTML / CSS / JavaScript ・ 設計からコーディングまで一人で ・ Claude Code使用</p>
+      </article>
+
+      <article class="work">
+        <div class="work-head">
+          <span class="kind">情報整理ページ</span>
+          <h3><a href="https://triki1102.github.io/yomumae/" target="_blank" rel="noopener">読む前ライブラリ（1,007冊の調査レポート）</a></h3>
+        </div>
+        <p><b>課題:</b> 本を買う前に「中身と評判」をまとめて確かめたい。</p>
+        <p><b>作ったもの:</b> 1,007冊分の調査レポートを、検索と絞り込みで探せる1ページに。大量データを軽く表示する設計。</p>
+        <p class="tag">HTML / JavaScript ・ 検索・絞り込み ・ 大量データの整形</p>
+      </article>
+
+      <article class="work">
+        <div class="work-head">
+          <span class="kind">業務ツール</span>
+          <h3><a href="tools/store-board.html">店舗ボード（在庫・予約の管理画面）</a></h3>
+        </div>
+        <p><b>課題:</b> 小さな店の在庫と予約を、紙とメモではなく1画面で回したい。</p>
+        <p><b>作ったもの:</b> 在庫は発注点を下回ると自動で「今日の発注リスト」に。予約は日付ごとに一覧と件数。CSVの書き出し・読み込み付き。ブラウザだけで動き、データは端末内に保存。</p>
+        <p class="tag">JavaScript ・ localStorage ・ CSV ・ サンプルデータ入り</p>
+      </article>
+
+      <article class="work">
+        <div class="work-head">
+          <span class="kind">業務ツール</span>
+          <h3><a href="tools/inquiry-drafter.html">問い合わせ返信の下書きツール</a></h3>
+        </div>
+        <p><b>課題:</b> 毎日届く問い合わせメールに、同じ確認・同じ説明を何度も打っている。</p>
+        <p><b>作ったもの:</b> 受信文を貼ると種別を判定し、店舗情報を差し込んだ返信の下書きを作る。名前・日付・人数は本文から拾う。コピーして送るだけ。実案件ではAIに接続して本文生成まで自動化できます。</p>
+        <p class="tag">JavaScript ・ テンプレート差し込み ・ 種別の自動判定</p>
+      </article>
+
+      <article class="work">
+        <div class="work-head">
+          <span class="kind">記事</span>
+          <h3><a href="https://triki1102.github.io/ai-research-writing-portfolio/" target="_blank" rel="noopener">AIに丸投げしないための初心者向け活用法</a></h3>
+        </div>
+        <p><b>課題:</b> AI初心者が「何を頼めばいいか」「出力をそのまま使っていいか」で止まる。</p>
+        <p><b>作ったもの:</b> 目的・指示・確認の3ステップで解説した記事。公式情報を確認しながらAIと協働で執筆した工程を、そのまま見せています。</p>
+        <p class="tag">リサーチ ・ 構成 ・ 執筆 ・ 出典確認</p>
+      </article>
+
+      <article class="work">
+        <div class="work-head">
+          <span class="kind">サービス案内LP</span>
+          <h3><a href="https://triki1102.github.io/tochio-backoffice/" target="_blank" rel="noopener">栃尾バックオフィス（記帳・事務補助）</a></h3>
+        </div>
+        <p><b>課題:</b> 士業事務所に「何を渡すと何が返るか」を一目で伝えたい。</p>
+        <p><b>作ったもの:</b> 領収書10枚→仕訳データの見本を最初に見せる構成の1枚LP。申し込み導線まで。</p>
+        <p class="tag">LP ・ 構成と文章 ・ 見本先出しの設計</p>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="block" id="process">
+    <h2>進め方</h2>
+    <ol class="steps">
+      <li><b>聞き取り</b> 目的と「できたと言える条件」を一文にして確認します。</li>
+      <li><b>試作</b> 最小の動くものを2〜3日で出し、方向を見てもらいます。</li>
+      <li><b>仕上げ</b> 反応をもとに直し、動作確認と手順書を添えます。</li>
+      <li><b>納品後</b> 修正はPR単位で記録。次の課題があれば同じ流れで続けます。</li>
+    </ol>
+    <p class="note">制作にはAI（Claude Code）を使います。AIが出したものをそのまま採用せず、動作テストと内容確認をしてからお渡しします。個人情報・認証・決済にかかわる部分は、単独では進めません。</p>
+  </section>
+
+  <section class="block" id="contact">
+    <h2>連絡</h2>
+    <p>ご依頼・ご相談は、ランサーズまたはクラウドワークスのメッセージからお願いします。コードは <a href="https://github.com/triki1102" target="_blank" rel="noopener">GitHub（triki1102）</a> で管理しています。</p>
+  </section>
+
+  <footer class="foot">© 栃尾李樹 ・ このページ自体もClaude Codeで制作</footer>
+</div>
+</body>
+</html>
