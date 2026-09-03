@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>税務調査の対応｜ひかり会計事務所（架空のサンプルLP）</title>
+<meta name="description" content="税務署から税務調査の連絡が来た事業者向けの対応サービス案内。架空の税理士事務所を題材にした制作サンプルです。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --navy: #1C3557; --navy-2: #24446E; --ink: #1F2933; --ink-2: #4B5563; --ink-3: #6B7280;
+    --paper: #FFFFFF; --ground: #F5F7FA; --line: #DDE3EA;
+    --cta: #C8781F; --cta-ink: #9A5A12; --cta-soft: #FBF1E3;
+    --ok: #2E7D5B;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif; color: var(--ink); background: var(--paper); line-height: 1.8; font-size: 16px; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { font-family: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif; letter-spacing: .02em; text-wrap: balance; }
+  a { color: var(--navy-2); }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 22px; }
+  .sample-note { background: #FFF7D6; color: #6B4E00; font-size: 12.5px; text-align: center; padding: 6px 12px; }
+
+  /* header */
+  .top { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; }
+  .brand { font-family: "Noto Serif JP", serif; font-weight: 700; font-size: 18px; color: var(--navy); text-decoration: none; }
+  .brand small { display: block; font-family: "Noto Sans JP", sans-serif; font-weight: 400; font-size: 11px; color: var(--ink-3); letter-spacing: .08em; }
+  .top-cta { display: flex; gap: 10px; align-items: center; }
+  .tel { font-size: 15px; color: var(--ink); text-decoration: none; font-weight: 700; }
+  .tel small { display: block; font-size: 11px; color: var(--ink-3); font-weight: 400; }
+  .btn { display: inline-block; text-decoration: none; font-weight: 700; padding: 12px 22px; border-radius: 6px; background: var(--cta); color: #fff; box-shadow: 0 2px 0 var(--cta-ink); transition: transform .1s, background .15s; }
+  .btn:hover { background: var(--cta-ink); }
+  .btn:active { transform: translateY(1px); box-shadow: none; }
+  .btn.ghost { background: transparent; color: var(--navy); border: 2px solid var(--navy); box-shadow: none; }
+  .btn.ghost:hover { background: var(--ground); }
+
+  /* hero */
+  .hero { background: linear-gradient(180deg, #F5F7FA 0%, #FFFFFF 100%); padding: 40px 0 44px; border-top: 1px solid var(--line); }
+  .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 36px; align-items: center; }
+  .eyebrow { display: inline-block; background: var(--navy); color: #fff; font-size: 12.5px; letter-spacing: .12em; padding: 3px 12px; border-radius: 3px; margin-bottom: 14px; }
+  h1 { font-size: clamp(28px, 4.4vw, 40px); line-height: 1.35; margin: 0 0 16px; color: var(--navy); }
+  .hero p { margin: 0 0 20px; color: var(--ink-2); font-size: 16.5px; }
+  .hero-points { display: flex; gap: 12px; flex-wrap: wrap; margin: 0 0 22px; padding: 0; list-style: none; }
+  .hero-points li { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 5px 14px; font-size: 13.5px; }
+  .hero-points li::before { content: "✓ "; color: var(--ok); font-weight: 700; }
+  .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .hero-side { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 22px 24px; box-shadow: 0 6px 24px rgba(28,53,87,.08); }
+  .hero-side h2 { font-size: 17px; margin: 0 0 10px; color: var(--navy); }
+  .hero-side ol { margin: 0; padding-left: 1.3em; font-size: 14.5px; color: var(--ink-2); }
+  .hero-side li + li { margin-top: 6px; }
+  .hero-side .deadline { margin-top: 14px; padding: 10px 12px; background: var(--cta-soft); border-radius: 6px; font-size: 13.5px; color: var(--cta-ink); }
+
+  section { padding: 56px 0; }
+  section.alt { background: var(--ground); }
+  h2.sec { font-size: clamp(22px, 3.2vw, 28px); color: var(--navy); margin: 0 0 8px; text-align: center; }
+  .sec-lead { text-align: center; color: var(--ink-2); margin: 0 auto 32px; max-width: 40em; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 22px; }
+  .card h3 { font-size: 17px; margin: 0 0 8px; color: var(--navy); }
+  .card p { margin: 0; color: var(--ink-2); font-size: 14.5px; }
+  .card .q { font-family: "Noto Sans JP", sans-serif; font-weight: 700; color: var(--ink); font-size: 15px; margin-bottom: 8px; }
+
+  .steps { counter-reset: s; display: grid; gap: 14px; }
+  .step { display: grid; grid-template-columns: 56px 1fr; gap: 16px; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; align-items: start; }
+  .step::before { counter-increment: s; content: counter(s); font-family: "Noto Serif JP", serif; font-size: 28px; font-weight: 700; color: var(--navy); line-height: 1; padding-top: 2px; }
+  .step h3 { margin: 0 0 4px; font-size: 16px; }
+  .step p { margin: 0; font-size: 14.5px; color: var(--ink-2); }
+  .step .when { font-size: 12.5px; color: var(--ink-3); margin-top: 4px; }
+
+  .price { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .plan { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 22px; position: relative; }
+  .plan.main { border-color: var(--navy); border-width: 2px; }
+  .plan .badge { position: absolute; top: -12px; left: 18px; background: var(--navy); color: #fff; font-size: 12px; padding: 2px 10px; border-radius: 3px; }
+  .plan h3 { margin: 6px 0 4px; font-size: 17px; }
+  .plan .amount { font-family: "Noto Serif JP", serif; font-size: 30px; font-weight: 700; color: var(--navy); margin: 6px 0 2px; }
+  .plan .amount small { font-size: 14px; font-weight: 500; color: var(--ink-3); }
+  .plan ul { margin: 10px 0 0; padding-left: 1.2em; font-size: 14px; color: var(--ink-2); }
+  .price-note { font-size: 12.5px; color: var(--ink-3); margin-top: 14px; text-align: center; }
+
+  .cases { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+  .case { background: #fff; border-left: 4px solid var(--navy); border-radius: 0 10px 10px 0; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+  .case .who { font-size: 12.5px; color: var(--ink-3); margin-bottom: 4px; }
+  .case h3 { font-size: 16px; margin: 0 0 8px; }
+  .case p { margin: 0; font-size: 14px; color: var(--ink-2); }
+  .case .result { color: var(--ok); font-weight: 700; margin-top: 8px; font-size: 14px; }
+
+  .faq { max-width: 760px; margin: 0 auto; }
+  details { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 0 18px; margin-bottom: 10px; }
+  summary { cursor: pointer; padding: 14px 0; font-weight: 700; list-style: none; display: flex; gap: 10px; align-items: center; }
+  summary::before { content: "Q"; font-family: "Noto Serif JP", serif; color: var(--navy); font-size: 18px; }
+  summary::-webkit-details-marker { display: none; }
+  details p { margin: 0 0 14px; color: var(--ink-2); font-size: 14.5px; padding-left: 26px; }
+
+  .office { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+  .office dl { margin: 0; display: grid; grid-template-columns: 110px 1fr; gap: 8px 12px; font-size: 14.5px; }
+  .office dt { color: var(--ink-3); }
+  .office dd { margin: 0; }
+  .person { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; font-size: 14.5px; color: var(--ink-2); }
+  .person b { display: block; color: var(--ink); font-size: 16px; margin-bottom: 4px; }
+
+  .contact { background: var(--navy); color: #fff; }
+  .contact h2.sec { color: #fff; }
+  .contact .sec-lead { color: #D6E0EE; }
+  .form { max-width: 620px; margin: 0 auto; background: #fff; color: var(--ink); border-radius: 10px; padding: 24px; }
+  .form label { display: block; font-size: 13.5px; font-weight: 700; margin: 12px 0 4px; }
+  .form label span { color: var(--cta); font-weight: 400; font-size: 12px; margin-left: 6px; }
+  .form input, .form select, .form textarea { width: 100%; font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; }
+  .form textarea { min-height: 90px; resize: vertical; }
+  .form .btn { width: 100%; text-align: center; margin-top: 16px; border: 0; font-size: 16px; cursor: pointer; }
+  .form .fine { font-size: 12px; color: var(--ink-3); margin: 10px 0 0; text-align: center; }
+  .form .done { display: none; background: #E8F5EE; color: var(--ok); padding: 14px; border-radius: 6px; text-align: center; font-weight: 700; margin-top: 12px; }
+
+  footer { padding: 24px 0; font-size: 12.5px; color: var(--ink-3); text-align: center; border-top: 1px solid var(--line); }
+  .sticky { position: fixed; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,.96); border-top: 1px solid var(--line); padding: 10px 16px; display: none; gap: 10px; justify-content: center; backdrop-filter: blur(6px); }
+  @media (max-width: 760px) {
+    .hero-grid, .office { grid-template-columns: 1fr; }
+    .top-cta .btn { display: none; }
+    .sticky { display: flex; }
+    body { padding-bottom: 70px; }
+    section { padding: 44px 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
+</style>
+</head>
+<body>
+<div class="sample-note">これは架空の税理士事務所を題材にした制作サンプルです。事務所名・数字・事例はすべて仮のものです。</div>
+
+<header class="wrap top">
+  <a class="brand" href="#">ひかり会計事務所<small>税理士 ・ 練馬区（架空）</small></a>
+  <div class="top-cta">
+    <a class="tel" href="tel:0000000000">03-0000-0000<small>平日 9:00〜18:00</small></a>
+    <a class="btn" href="#contact">無料相談を申し込む</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">税務調査の連絡が来た方へ</span>
+      <h1>税務署からの電話に、<br>ひとりで対応しないでください。</h1>
+      <p>「何を聞かれるのか」「いくら払うことになるのか」。不安の正体は、準備の手順が見えないことです。当事務所は、調査日の前日までに準備を終え、当日は税理士が同席します。</p>
+      <ul class="hero-points">
+        <li>初回相談は無料・秘密厳守</li>
+        <li>調査日の前日までに準備完了</li>
+        <li>当日は税理士が立ち会い</li>
+        <li>個人事業主・法人どちらも対応</li>
+      </ul>
+      <div class="hero-cta">
+        <a class="btn" href="#contact">無料相談を申し込む（24時間受付）</a>
+        <a class="btn ghost" href="#flow">対応の流れを見る</a>
+      </div>
+    </div>
+    <aside class="hero-side">
+      <h2>今すぐ確認したい3つのこと</h2>
+      <ol>
+        <li>税務署から伝えられた<b>調査の日程</b>（延期の相談は可能です）</li>
+        <li>対象となる<b>年度</b>（通常は直近3年分）</li>
+        <li>手元にある<b>帳簿・領収書・通帳</b>の保管状況</li>
+      </ol>
+      <div class="deadline">日程の連絡から調査日までは、通常2〜3週間。準備に使える時間は思ったより短いです。</div>
+    </aside>
+  </div>
+</section>
+
+<section class="alt" id="worries">
+  <div class="wrap">
+    <h2 class="sec">こんな不安はありませんか</h2>
+    <p class="sec-lead">税務調査の相談で、最初に伺うことの多い3つです。どれも「準備すれば答えが出る」ものです。</p>
+    <div class="cards">
+      <article class="card">
+        <div class="q">「何年分、何を見られるのか分からない」</div>
+        <p>通常は直近3年分の帳簿・請求書・領収書・通帳が対象です。何を用意すべきか、当事務所がリストにしてお渡しします。</p>
+      </article>
+      <article class="card">
+        <div class="q">「追徴がいくらになるか怖い」</div>
+        <p>事前に帳簿を見直し、指摘されそうな箇所と金額の見込みを先に出します。想定外をなくすことが、いちばんの安心材料です。</p>
+      </article>
+      <article class="card">
+        <div class="q">「調査官に何を話せばいいか分からない」</div>
+        <p>当日は税理士が同席し、質問の意図を整理してからお答えします。答える必要のないことまで話してしまう心配がなくなります。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="flow">
+  <div class="wrap">
+    <h2 class="sec">ご相談から調査終了までの流れ</h2>
+    <p class="sec-lead">初回相談の当日に、やることと日程をすべてお伝えします。</p>
+    <div class="steps">
+      <div class="step"><div><h3>無料相談（電話・オンライン・来所）</h3><p>調査の通知内容、業種、帳簿の状況を伺い、対応方針と費用をその場でお伝えします。</p><div class="when">所要 30〜60分 ・ ご連絡から原則2営業日以内</div></div></div>
+      <div class="step"><div><h3>資料の確認と事前チェック</h3><p>帳簿・領収書・通帳を拝見し、指摘されやすい点を洗い出します。必要なら修正申告の要否も判断します。</p><div class="when">調査日の1週間前まで</div></div></div>
+      <div class="step"><div><h3>当日の打ち合わせ</h3><p>調査官から聞かれやすい質問と答え方を、前日までに一緒に確認します。</p><div class="when">調査日の前日まで</div></div></div>
+      <div class="step"><div><h3>税務調査の当日（税理士が同席）</h3><p>質問への回答は税理士が整理してから行います。調査は通常1〜2日で、その後は書面や電話のやり取りになります。</p><div class="when">調査日 ・ 原則として全日程に同席</div></div></div>
+      <div class="step"><div><h3>指摘事項への対応と終了</h3><p>指摘があれば内容を精査し、必要な範囲でのみ修正申告を行います。納税額の分割相談も行います。</p><div class="when">調査後 2〜4週間</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="price">
+  <div class="wrap">
+    <h2 class="sec">料金</h2>
+    <p class="sec-lead">初回相談の際に、総額の見込みをお伝えします。あとから増える費用はありません。</p>
+    <div class="price">
+      <article class="plan">
+        <h3>事前相談のみ</h3>
+        <div class="amount">0<small>円</small></div>
+        <ul><li>通知内容の確認と対応方針</li><li>用意すべき資料のリスト</li><li>60分まで ・ 電話・オンライン可</li></ul>
+      </article>
+      <article class="plan main">
+        <span class="badge">ご相談の多いプラン</span>
+        <h3>立会いサポート</h3>
+        <div class="amount">110,000<small>円〜（税込）</small></div>
+        <ul><li>事前チェックと修正の要否判断</li><li>当日の同席（1日あたり）</li><li>調査後の指摘対応 ・ 書面作成</li></ul>
+      </article>
+      <article class="plan">
+        <h3>顧問契約のお客様</h3>
+        <div class="amount">55,000<small>円〜（税込）</small></div>
+        <ul><li>立会いサポートの内容すべて</li><li>顧問料に応じて割引</li><li>次回以降の調査対策も継続</li></ul>
+      </article>
+    </div>
+    <p class="price-note">※ 立会い2日目以降は1日あたり55,000円（税込）。修正申告が必要な場合は別途お見積りします。数字はサンプル用の仮の金額です。</p>
+  </div>
+</section>
+
+<section id="cases">
+  <div class="wrap">
+    <h2 class="sec">対応事例（架空）</h2>
+    <p class="sec-lead">サンプルのため、事例は業種と流れのイメージを示す架空のものです。</p>
+    <div class="cases">
+      <article class="case"><div class="who">飲食店 ・ 個人事業主 ・ 開業5年</div><h3>売上の計上漏れを指摘される前に整理</h3><p>通知後すぐにご相談。現金売上の記録に抜けがあり、事前に集計し直して調査官へ説明。追加の資料要求なく2日で終了。</p><div class="result">想定していた追徴額の範囲内で終了</div></article>
+      <article class="case"><div class="who">建設業 ・ 法人 ・ 従業員8名</div><h3>外注費と給与の線引きを整理</h3><p>外注先への支払いが給与と見なされるおそれがあった案件。契約書と作業実態を整理して説明し、指摘なし。</p><div class="result">指摘なしで終了</div></article>
+      <article class="case"><div class="who">ネット物販 ・ 個人事業主</div><h3>経費の根拠資料をそろえて対応</h3><p>領収書の一部が紛失。カード明細と発注履歴で裏付けを再構成し、認められる経費の範囲を事前に整理。</p><div class="result">修正申告は最小限で決着</div></article>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="faq">
+  <div class="wrap">
+    <h2 class="sec">よくある質問</h2>
+    <div class="faq">
+      <details open><summary>調査日はもう決まっています。今から依頼しても間に合いますか。</summary><p>間に合うことが多いです。調査日まで1週間あれば事前チェックは可能です。日程の延期を税務署に相談することもできますので、まずご連絡ください。</p></details>
+      <details><summary>帳簿をきちんとつけていません。それでも相談できますか。</summary><p>できます。通帳・領収書・請求書など手元にあるものから、できる範囲で整理します。状況を正直にお伝えいただくほど、対応の選択肢が増えます。</p></details>
+      <details><summary>顧問税理士がいますが、税務調査だけお願いできますか。</summary><p>税務調査の対応のみのご依頼も承っています。顧問税理士の方との連携が必要な場合は、ご相談のうえ進めます。</p></details>
+      <details><summary>費用はいつ支払いますか。</summary><p>着手時に半額、調査終了後に残額をお願いしています。分割のご相談も可能です。</p></details>
+      <details><summary>相談した内容が外部に漏れることはありませんか。</summary><p>税理士には法律上の守秘義務があります。ご相談内容が外部に出ることはありません。</p></details>
+    </div>
+  </div>
+</section>
+
+<section id="office">
+  <div class="wrap">
+    <h2 class="sec">事務所のご案内</h2>
+    <div class="office" style="margin-top:24px">
+      <dl>
+        <dt>事務所名</dt><dd>ひかり会計事務所（架空）</dd>
+        <dt>所在地</dt><dd>東京都練馬区〇〇 1-2-3 〇〇ビル 4F</dd>
+        <dt>最寄り駅</dt><dd>西武池袋線 練馬駅 徒歩5分</dd>
+        <dt>営業時間</dt><dd>平日 9:00〜18:00（相談は土曜も可・要予約）</dd>
+        <dt>対応地域</dt><dd>東京23区・埼玉県南部。オンラインなら全国</dd>
+        <dt>電話</dt><dd>03-0000-0000</dd>
+      </dl>
+      <div class="person"><b>代表税理士 光野 一郎（架空）</b>税理士登録 20XX年。税務署での勤務経験を経て独立。調査官が「どこを見るか」を知っているからこそ、事前の準備に力を入れています。<br><br>「調査の連絡が来た日が、いちばん不安な日です。その日のうちにご連絡ください。」</div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <h2 class="sec">無料相談のお申し込み</h2>
+    <p class="sec-lead">24時間受け付けています。2営業日以内に、こちらからご連絡します。</p>
+    <form class="form" id="form" novalidate>
+      <label>お名前<span>必須</span></label><input type="text" name="name" required autocomplete="name">
+      <label>電話番号またはメール<span>必須</span></label><input type="text" name="contact" required>
+      <label>事業の形態</label>
+      <select name="type"><option>個人事業主</option><option>法人</option><option>その他・分からない</option></select>
+      <label>調査日（決まっていれば）</label><input type="date" name="date">
+      <label>ご相談内容（分かる範囲で）</label><textarea name="body" placeholder="例：9月20日に調査の連絡がありました。対象は3年分と言われています。"></textarea>
+      <button class="btn" type="submit">この内容で相談を申し込む</button>
+      <p class="fine">サンプルのため送信されません。実案件ではフォーム送信とメール通知を実装します。</p>
+      <div class="done" id="done">お申し込みを受け付けました（サンプル表示）。2営業日以内にご連絡します。</div>
+    </form>
+  </div>
+</section>
+
+<footer>© ひかり会計事務所（架空） ・ 制作サンプル: 栃尾李樹（Claude Code使用） ・ <a href="../index.html">制作実績へ</a></footer>
+
+<div class="sticky">
+  <a class="btn ghost" href="tel:0000000000">電話する</a>
+  <a class="btn" href="#contact">無料相談を申し込む</a>
+</div>
+
+<script>
+  document.getElementById('form').addEventListener('submit', e => {
+    e.preventDefault();
+    const f = e.target;
+    const need = [...f.querySelectorAll('[required]')].filter(i => !i.value.trim());
+    if (need.length) { need[0].focus(); need[0].style.borderColor = '#C8781F'; return; }
+    document.getElementById('done').style.display = 'block';
+    f.querySelector('button').disabled = true;
+  });
+</script>
+</body>
+</html>
